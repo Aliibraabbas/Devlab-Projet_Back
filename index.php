@@ -21,7 +21,6 @@
         echo 'Guest';
     } 
     ?> </h1>
-
 <br><br><br>
 
     <label for="">Choisir une categorie</label>
@@ -37,7 +36,7 @@
     <div class="grid grid-cols-3 p-40 grid-flow-row gap-4 accueil"></div>
 
 
- 
+
     <script src="api/accueil.js"></script>
 
     <?php 

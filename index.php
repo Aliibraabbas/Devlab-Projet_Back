@@ -47,10 +47,6 @@
     <div class="grid grid-cols-3 p-40 grid-flow-row gap-4 accueil"></div>
 
 
-<<<<<<< HEAD
-=======
-
->>>>>>> b5db5d9935cbdbbc21566899c5dd6c4db912eedd
     <script src="api/accueil.js"></script>
 
     <?php 

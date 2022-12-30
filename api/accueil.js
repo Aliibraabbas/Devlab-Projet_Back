@@ -6,6 +6,9 @@ let allFilmId = []
 let allFilmName = []
 let isNameSorted = 0
 
+window.onload = function() {
+    showAllFilm(trending)
+};
 
 fetch(trending)
     .then((response) => 
@@ -75,10 +78,8 @@ searchButton.addEventListener("click", function() {
                 triFilmName(trending)
             }
         }
-
     }
 })
-    
 
 function resetInnerHTML(url) {
     // Affiche tout les films
@@ -213,7 +214,7 @@ function triFilmName(url) {
                     })
                 })
             }
-            
+
             console.log("juste avant")
             console.log(fetchFilm.length)
             // On affiche

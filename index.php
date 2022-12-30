@@ -1,3 +1,9 @@
+<?php 
+    include_once 'header.php'
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,7 +14,15 @@
     <title>Document</title>
 </head>
 <body>
-    <h2 class="text-lg text-blue-700">test</h2>
+
+<h1 class="text-center font-bold mt-14 text-4xl">Welcome, <?php if(isset($_SESSION['usersId'])){
+        echo explode(" ", $_SESSION['usersName'])[0];
+    }else{
+        echo 'Guest';
+    } 
+    ?> </h1>
+
+<br><br><br>
 
     <label for="">Choisir une categorie</label>
     <select id="catego" class="filter">
@@ -22,6 +36,13 @@
 
     <div class="grid grid-cols-3 p-40 grid-flow-row gap-4 accueil"></div>
 
+
+ 
     <script src="api/accueil.js"></script>
+
+    <?php 
+     include_once 'footer.php'
+    ?>
+
 </body>
 </html>

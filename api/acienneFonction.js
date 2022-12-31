@@ -76,3 +76,45 @@ function triFilmName(url) {
         }
 }
 ////////////////////////////////////////////////////////
+
+
+
+
+// On trie par popularité croissante
+let sortedFilmPopularity = []
+let sortedFilmName = []
+let done = false
+newUrl.forEach(url => {
+    fetch(url)
+        .then((response) => 
+            response.json())
+        .then(function(data) {
+            // console.log(data.results[0].popularity)
+
+            data.results.forEach(test => {
+            })
+
+            // sortedFilmPopularity.push(data.results[0].popularity)
+            // sortedFilmName.push(data.results[0].title)
+            // while(!done) {
+            //     console.log(sortedFilmPopularity)
+            //     done = true
+                // for(var i = 1; i < sortedFilmPopularity.length; i++) {
+
+                //     if (sortedFilmPopularity[i - 1] > sortedFilmPopularity[i]) {
+                //         done = false
+                //         var tmpPopularity = sortedFilmPopularity[i - 1]
+                //         var tmpName = sortedFilmName[i - 1]
+
+                //         sortedFilmPopularity[i - 1] = sortedFilmPopularity[i]
+                //         sortedFilmName[i - 1] = sortedFilmName[i]
+
+                //         sortedFilmPopularity[i] = tmpPopularity
+                //         sortedFilmName[i] = tmpName
+                //     }
+                // }
+            //     // console.log(sortedFilmPopularity)
+            // }
+
+    })
+})

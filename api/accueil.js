@@ -61,9 +61,13 @@ searchButton.addEventListener("click", function() {
             resetInnerHTML(trending)
             showAllFilm(trending)
         }else {
-            if(currentTri != "") {
+            if(currentTri == "nom") {
                 resetInnerHTML(trending)
                 triFilmNameId(trending)
+            }else if(currentTri == "popularite") {
+                console.log('jhajhajha')
+                resetInnerHTML(trending)
+                getPopularity(trending)
             }
         }
 
@@ -73,10 +77,13 @@ searchButton.addEventListener("click", function() {
             resetInnerHTML(trending)
             showFilmByGenre(trending)
         }else {
-            if(currentTri != "") {
-                console.log('celui la')
+            if(currentTri == "nom") {
                 resetInnerHTML(trending)
                 triFilmNameGenreId()
+            }else if(currentTri == "popularite") {
+                console.log('jhajhajha')
+                resetInnerHTML(trending)
+                getPopularityIfGenre()
             }
         }
     }
@@ -99,6 +106,8 @@ function resetInnerHTML(url) {
         })
     })
 }
+
+// -------------------------- AFFICHAGE DE FILM -------------------------------- //
 
 // Affiche tout les film par genre (sans tri)
 function showFilmByGenre(url) {
@@ -162,7 +171,7 @@ function showAllFilm(url) {
 
 }
 
-// Affiche tout le film (pas sur de la methode)
+// Affiche tout le film
 function showAllFilmFilter(url) {
 
     // Affiche tout les films
@@ -184,6 +193,8 @@ function showAllFilmFilter(url) {
 
 }
 
+// ------------------------------------- TRI DES FILMS PAR NOM (atm croissant) ----------------------------- //
+
 // Tri les nom et recupere les ids
 function triFilmNameId(url) {
 
@@ -192,8 +203,8 @@ function triFilmNameId(url) {
             response.json())
 
         .then(function(data) {
-            let fetchFilm = []
-            let fetchFilmId = []
+            var fetchFilm = []
+            var fetchFilmId = []
             // SI il n'y a pas de genre on push juste
             if(currentGenre == "") {
 
@@ -219,8 +230,8 @@ function triFilmNameId(url) {
                             fetchFilmId[i] = tmpid
                         }
                     }
-                    console.log(fetchFilm)
-                    console.log(fetchFilmId)
+                    // console.log(fetchFilm)
+                    // console.log(fetchFilmId)
                 }
                 
             }
@@ -231,13 +242,12 @@ function triFilmNameId(url) {
             }
         })
 }
-// triFilmNameId(trending)
 
 // Tri par nom si y a un genre et recup les id pour afficher
 function triFilmNameGenreId() {
     console.log("avec un genreeee")
-    let fetchFilm = []
-    let fetchFilmId = []
+    var fetchFilm = []
+    var fetchFilmId = []
     let limite = 0
 
     for(var i = 0; i < allFilmId.length; i++) {
@@ -288,6 +298,107 @@ function triFilmNameGenreId() {
     
 }
 
+// ------------------------------- TRI PAR POPULARITE (ordre croissant ) ------------------------- //
+
+function getPopularity(url) {
+
+    // On recupre tout les url de details pour avoir la popularité des films
+    fetch(url)
+        .then((response) => 
+            response.json())
+
+        .then(function(data) {
+            var fetchFilm = []
+            var fetchFilmId = []
+            for (var i = 0; i < data.results.length; i++) {
+                fetchFilm.push(data.results[i].popularity)
+                fetchFilmId.push(data.results[i].id)
+            }
+
+            var done = false
+            while(!done) {
+                done = true
+                for(var i = 1; i < fetchFilm.length; i++) {
+                    if (fetchFilm[i - 1] > fetchFilm[i]) {
+                        done = false
+                        var tmpPopularity = fetchFilm[i - 1]
+                        var tmpid = fetchFilmId[i - 1]
+        
+                        fetchFilm[i - 1] = fetchFilm[i]
+                        fetchFilmId[i - 1] = fetchFilmId[i]
+        
+                        fetchFilm[i] = tmpPopularity
+                        fetchFilmId[i] = tmpid
+                    }
+
+                }
+                console.log('popularité : ' ,fetchFilm)
+                console.log('le id : ' ,fetchFilmId)
+            }
+            // On affiche
+            for (var i = 0; i < fetchFilm.length; i++) {
+                let newUrl = "https://api.themoviedb.org/3/movie/" + fetchFilmId[i] + "?api_key=4d96b3b4809a91b441704c4ff361ba94&language=fr-FR"
+                showAllFilmFilter(newUrl)
+            }
+        })
+
+}
+
+function getPopularityIfGenre() {
+
+    var fetchFilm = []
+    var fetchFilmId = []
+    let limite = 0
+
+    for(var i = 0; i < allFilmId.length; i++) {
+        let film = "https://api.themoviedb.org/3/movie/" + allFilmId[i] + "?api_key=4d96b3b4809a91b441704c4ff361ba94&language=fr-FR"
+        fetch(film)
+            .then((response) => 
+                response.json())
+            .then(function(data) {
+                data.genres.forEach(result => {
+                    // On remplie les tableaux
+                    if(result.name == currentGenre) {
+                        fetchFilm.push(data.popularity)
+                        fetchFilmId.push(data.id)
+                    }
+                })
+                // Mtn on trie
+                var done = false
+                while(!done) {
+                    done = true
+                    for(var i = 1; i < fetchFilm.length; i++) {
+
+                        if (fetchFilm[i - 1] > fetchFilm[i]) {
+                            done = false
+                            var tmpPopularity = fetchFilm[i - 1]
+                            var tmpid = fetchFilmId[i - 1]
+            
+                            fetchFilm[i - 1] = fetchFilm[i]
+                            fetchFilmId[i - 1] = fetchFilmId[i]
+            
+                            fetchFilm[i] = tmpPopularity
+                            fetchFilmId[i] = tmpid
+                        }
+                    }
+                    console.log("popularité : " ,fetchFilm)
+                    console.log("l'id du film : " ,fetchFilmId)
+                }
+
+                // On affiche
+                limite += 1
+                if(limite == allFilmId.length) {
+                    for (var i = 0; i < fetchFilm.length; i++) {
+                        let newUrl = "https://api.themoviedb.org/3/movie/" + fetchFilmId[i] + "?api_key=4d96b3b4809a91b441704c4ff361ba94&language=fr-FR"
+                        showAllFilmFilter(newUrl)
+                    }
+                }
+        })
+    }
+}
+
+// -------------------------------------- AUTRES ------------------------------------ //
+
 function writeTitle(filmName) {
     let newTitle = ""
     for (var i = 0; i < filmName.length; i++) {
@@ -310,7 +421,7 @@ function getFilmDetailUrl(url) {
             response.json())
 
         .then(function(data) {
-            let fetchFilm = []
+            var fetchFilm = []
             // console.log("pas de genre")
             for (var i = 0; i < data.results.length; i++) {
                 fetchFilm.push(data.results[i].title)
@@ -325,68 +436,7 @@ function getFilmDetailUrl(url) {
 
 }
 
-function getPopularity(url) {
 
-    // On recupre tout les url de details pour avoir la popularité des films
-    let newUrl = []
-    fetch(url)
-        .then((response) => 
-            response.json())
-
-        .then(function(data) {
-            let fetchFilm = []
-            // console.log("pas de genre")
-            for (var i = 0; i < data.results.length; i++) {
-                fetchFilm.push(data.results[i].title)
-            }
-            fetchFilm.sort()
-            // On affiche
-            for (var i = 0; i < fetchFilm.length; i++) {
-                newUrl.push(writeTitle(fetchFilm[i]))
-            }
-
-            // On trie par popularité croissante
-            let sortedFilmPopularity = []
-            let sortedFilmName = []
-            let done = false
-            newUrl.forEach(url => {
-                fetch(url)
-                    .then((response) => 
-                        response.json())
-                    .then(function(data) {
-                        // console.log(data.results[0].popularity)
-
-                        data.results.forEach(test => {
-                        })
-
-                        // sortedFilmPopularity.push(data.results[0].popularity)
-                        // sortedFilmName.push(data.results[0].title)
-                        // while(!done) {
-                        //     console.log(sortedFilmPopularity)
-                        //     done = true
-                            // for(var i = 1; i < sortedFilmPopularity.length; i++) {
-
-                            //     if (sortedFilmPopularity[i - 1] > sortedFilmPopularity[i]) {
-                            //         done = false
-                            //         var tmpPopularity = sortedFilmPopularity[i - 1]
-                            //         var tmpName = sortedFilmName[i - 1]
-
-                            //         sortedFilmPopularity[i - 1] = sortedFilmPopularity[i]
-                            //         sortedFilmName[i - 1] = sortedFilmName[i]
-
-                            //         sortedFilmPopularity[i] = tmpPopularity
-                            //         sortedFilmName[i] = tmpName
-                            //     }
-                            // }
-                        //     // console.log(sortedFilmPopularity)
-                        // }
-        
-                })
-            })
-        })
-
-}
-getPopularity(trending)
 
 function bubbleSort(array) {
     var done = false;

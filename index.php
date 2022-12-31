@@ -27,7 +27,7 @@
     <select id="catego" class="genre">
         <option value="">Aucun</option>
         <option value="Action">Action</option>
-        <option value="Adventure">Adventure</option>
+        <option value="Aventure">Aventure</option>
         <option value="Animation">Animation</option>
         <option value="Crime">Crime</option>
         <option value="Policier">Policier</option>

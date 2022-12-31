@@ -73,9 +73,9 @@ searchButton.addEventListener("click", function() {
             resetInnerHTML(trending)
             showFilmByGenre(trending)
         }else {
-            if(currentTri == "nom") {
+            if(currentTri != "") {
                 resetInnerHTML(trending)
-                triFilmName(trending)
+                triFilmNameGenre()
             }
         }
     }
@@ -189,34 +189,15 @@ function triFilmName(url) {
             let fetchFilm = []
             // SI il n'y a pas de genre on push juste
             if(currentGenre == "") {
-                console.log("pas de genre")
+                // console.log("pas de genre")
                 for (var i = 0; i < data.results.length; i++) {
                     fetchFilm.push(data.results[i].title)
                 }
                 fetchFilm.sort()
             // Sinon, si il y a un genre on push seulement ceux qui on le genre
-            }else {
-                console.log("avec un genre")
-                allFilmId.forEach(film_id => {
-                    let film = "https://api.themoviedb.org/3/movie/" + film_id + "?api_key=4d96b3b4809a91b441704c4ff361ba94&language=fr-FR"
-                    
-                    fetch(film)
-                        .then((response) => 
-                            response.json())
-                
-                        .then(function(data) {
-                            data.genres.forEach(result => {
-                                if(result.name == currentGenre) {
-                                    fetchFilm.push(data.title)
-                                }
-                            })
-                            fetchFilm.sort()
-                    })
-                })
             }
 
-            console.log("juste avant")
-            console.log(fetchFilm.length)
+            console.log("juste avant" , fetchFilm.length)
             // On affiche
             for (var i = 0; i < fetchFilm.length; i++) {
                 console.log("caca")
@@ -226,6 +207,41 @@ function triFilmName(url) {
         })
 
 }
+
+function triFilmNameGenre() {
+        console.log("avec un genre")
+        let fetchFilm = []
+        let limite = 0
+
+        for(var i = 0; i < allFilmId.length; i++) {
+            let film = "https://api.themoviedb.org/3/movie/" + allFilmId[i] + "?api_key=4d96b3b4809a91b441704c4ff361ba94&language=fr-FR"
+            fetch(film)
+                .then((response) => 
+                    response.json())
+                .then(function(data) {
+                    data.genres.forEach(result => {
+                        console.log(result.name)
+                        if(result.name == currentGenre) {
+
+                            fetchFilm.push(data.title)
+                        }
+                    })
+                    fetchFilm.sort()
+                    limite += 1
+                    if(limite == allFilmId.length) {
+                        if(fetchFilm.length != 0) {
+                            // On affiche
+                            for (var i = 0; i < fetchFilm.length; i++) {
+                                console.log("fetchFilm : " ,fetchFilm[i])
+                                let newUrl = writeTitle(fetchFilm[i])
+                                showAllFilmFilter(newUrl)
+                                wait = 1
+                            }
+                        }
+                    }
+            })
+        }
+    }
 
 function writeTitle(filmName) {
     let newTitle = ""
@@ -241,3 +257,36 @@ function writeTitle(filmName) {
     // console.log("https://api.themoviedb.org/3/search/movie?api_key=4d96b3b4809a91b441704c4ff361ba94&language=fr-FR&query=" + newTitle)
     return("https://api.themoviedb.org/3/search/movie?api_key=4d96b3b4809a91b441704c4ff361ba94&language=fr-FR&query=" + newTitle)
 }
+
+function getPopularity(url) {
+    fetch(url)
+        .then((response) => 
+            response.json())
+        .then(function(data) {
+            data.forEach(dataPopularity => {
+
+            })
+
+        })
+}
+
+function bubbleSort(array) {
+    var done = false;
+    while (!done) {
+      done = true;
+      for (var i = 1; i < array.length; i += 1) {
+        if (array[i - 1] > array[i]) {
+          done = false;
+          var tmp = array[i - 1];
+          array[i - 1] = array[i];
+          array[i] = tmp;
+        }
+      }
+    }
+  
+    return array;
+  }
+  
+var numbers = [12, 10, 15, 11, 14, 13, 16];
+bubbleSort(numbers);
+// console.log("le sort mano :" , numbers);

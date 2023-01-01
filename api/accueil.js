@@ -5,11 +5,14 @@ let trending = "https://api.themoviedb.org/3/movie/popular?api_key=4d96b3b4809a9
 let allFilmId = []
 let allFilmName = []
 let isNameSorted = 0
+let isCroissant = true
 
+// Affiche les films au chargement
 window.onload = function() {
     showAllFilm(trending)
 };
 
+// Recupere tout les id des films
 fetch(trending)
     .then((response) => 
         response.json())
@@ -29,6 +32,26 @@ let currentGenre = category.value
 let tri = document.querySelector(".tri_filter")
 let currentTri = tri.value
 
+// recupere la classification actuel
+let classification = document.querySelector(".limiteAge")
+let currentClassification = classification.value
+
+// recupere le boutton croissant
+let croissant = document.querySelector(".croissant")
+
+// Met a jour croissant/decroissant
+croissant.addEventListener("click", function(){
+    if(isCroissant == true) {
+        isCroissant = false
+        croissant.textContent = 'Decroissant'
+    }else {
+        isCroissant = true
+        croissant.textContent = 'Croissant'
+    }
+    console.log(isCroissant)
+})
+
+// Met a jour le tri
 tri.addEventListener("click", function() {
     // Check si le sort est ok
     if(isNameSorted == 0) {
@@ -43,11 +66,19 @@ tri.addEventListener("click", function() {
     }
 })
 
-
 // Permet de mettre a jour quand on change de genre
 category.addEventListener("click", function(){
     if(currentGenre != category.value){
         currentGenre = category.value
+    }
+})
+
+// Met a jour la classification d'age
+classification.addEventListener("click", function() {
+
+    // Check si la value a changé
+    if(currentClassification != classification.value){
+        currentClassification = classification.value
     }
 })
 
@@ -65,7 +96,6 @@ searchButton.addEventListener("click", function() {
                 resetInnerHTML(trending)
                 triFilmNameId(trending)
             }else if(currentTri == "popularite") {
-                console.log('jhajhajha')
                 resetInnerHTML(trending)
                 getPopularity(trending)
             }
@@ -121,6 +151,7 @@ function showFilmByGenre(url) {
             // On recupere la page detail de tout les films grace a leur id et on verifie si leur genre correspond au genre choisit
             allFilmId.forEach(film_id => {
                 let film = "https://api.themoviedb.org/3/movie/" + film_id + "?api_key=4d96b3b4809a91b441704c4ff361ba94&language=en-FR"
+                let filmClassification = "https://api.themoviedb.org/3/movie/"+ film_id +"/release_dates?api_key=4d96b3b4809a91b441704c4ff361ba94"
                 
                 fetch(film)
                     .then((response) => 
@@ -193,7 +224,7 @@ function showAllFilmFilter(url) {
 
 }
 
-// ------------------------------------- TRI DES FILMS PAR NOM (atm croissant) ----------------------------- //
+// ------------------------------------- TRI DES FILMS PAR NOM ----------------------------- //
 
 // Tri les nom et recupere les ids
 function triFilmNameId(url) {
@@ -216,20 +247,39 @@ function triFilmNameId(url) {
                 var done = false
                 while(!done) {
                     done = true
-                    for(var i = 1; i < fetchFilm.length; i++) {
+                    if(isCroissant == true) {
+                        for(var i = 1; i < fetchFilm.length; i++) {
 
-                        if (fetchFilm[i - 1] > fetchFilm[i]) {
-                            done = false
-                            var tmpPopularity = fetchFilm[i - 1]
-                            var tmpid = fetchFilmId[i - 1]
-            
-                            fetchFilm[i - 1] = fetchFilm[i]
-                            fetchFilmId[i - 1] = fetchFilmId[i]
-            
-                            fetchFilm[i] = tmpPopularity
-                            fetchFilmId[i] = tmpid
+                            if (fetchFilm[i - 1] > fetchFilm[i]) {
+                                done = false
+                                var tmpPopularity = fetchFilm[i - 1]
+                                var tmpid = fetchFilmId[i - 1]
+                
+                                fetchFilm[i - 1] = fetchFilm[i]
+                                fetchFilmId[i - 1] = fetchFilmId[i]
+                
+                                fetchFilm[i] = tmpPopularity
+                                fetchFilmId[i] = tmpid
+                            }
+                        }
+                    }else {
+                        console.log("decroissant")
+                        for(var i = 1; i < fetchFilm.length; i++) {
+
+                            if (fetchFilm[i - 1] < fetchFilm[i]) {
+                                done = false
+                                var tmpPopularity = fetchFilm[i - 1]
+                                var tmpid = fetchFilmId[i - 1]
+                
+                                fetchFilm[i - 1] = fetchFilm[i]
+                                fetchFilmId[i - 1] = fetchFilmId[i]
+                
+                                fetchFilm[i] = tmpPopularity
+                                fetchFilmId[i] = tmpid
+                            }
                         }
                     }
+
                     // console.log(fetchFilm)
                     // console.log(fetchFilmId)
                 }
@@ -267,23 +317,39 @@ function triFilmNameGenreId() {
                 var done = false
                 while(!done) {
                     done = true
-                    for(var i = 1; i < fetchFilm.length; i++) {
+                    if(isCroissant == true) {
+                        for(var i = 1; i < fetchFilm.length; i++) {
 
-                        if (fetchFilm[i - 1] > fetchFilm[i]) {
-                            done = false
-                            var tmpPopularity = fetchFilm[i - 1]
-                            var tmpid = fetchFilmId[i - 1]
-            
-                            fetchFilm[i - 1] = fetchFilm[i]
-                            fetchFilmId[i - 1] = fetchFilmId[i]
-            
-                            fetchFilm[i] = tmpPopularity
-                            fetchFilmId[i] = tmpid
+                            if (fetchFilm[i - 1] > fetchFilm[i]) {
+                                done = false
+                                var tmpPopularity = fetchFilm[i - 1]
+                                var tmpid = fetchFilmId[i - 1]
+                
+                                fetchFilm[i - 1] = fetchFilm[i]
+                                fetchFilmId[i - 1] = fetchFilmId[i]
+                
+                                fetchFilm[i] = tmpPopularity
+                                fetchFilmId[i] = tmpid
+                            }
+                        }
+                    }else {
+                        for(var i = 1; i < fetchFilm.length; i++) {
+
+                            if (fetchFilm[i - 1] < fetchFilm[i]) {
+                                done = false
+                                var tmpPopularity = fetchFilm[i - 1]
+                                var tmpid = fetchFilmId[i - 1]
+                
+                                fetchFilm[i - 1] = fetchFilm[i]
+                                fetchFilmId[i - 1] = fetchFilmId[i]
+                
+                                fetchFilm[i] = tmpPopularity
+                                fetchFilmId[i] = tmpid
+                            }
                         }
                     }
-                    console.log(fetchFilm)
-                    console.log(fetchFilmId)
                 }
+                    
 
                 // On affiche
                 limite += 1
@@ -298,7 +364,7 @@ function triFilmNameGenreId() {
     
 }
 
-// ------------------------------- TRI PAR POPULARITE (ordre croissant ) ------------------------- //
+// ------------------------------- TRI PAR POPULARITE ------------------------- //
 
 function getPopularity(url) {
 
@@ -318,22 +384,36 @@ function getPopularity(url) {
             var done = false
             while(!done) {
                 done = true
-                for(var i = 1; i < fetchFilm.length; i++) {
-                    if (fetchFilm[i - 1] > fetchFilm[i]) {
-                        done = false
-                        var tmpPopularity = fetchFilm[i - 1]
-                        var tmpid = fetchFilmId[i - 1]
-        
-                        fetchFilm[i - 1] = fetchFilm[i]
-                        fetchFilmId[i - 1] = fetchFilmId[i]
-        
-                        fetchFilm[i] = tmpPopularity
-                        fetchFilmId[i] = tmpid
+                if(isCroissant == true) {
+                    for(var i = 1; i < fetchFilm.length; i++) {
+                        if (fetchFilm[i - 1] > fetchFilm[i]) {
+                            done = false
+                            var tmpPopularity = fetchFilm[i - 1]
+                            var tmpid = fetchFilmId[i - 1]
+            
+                            fetchFilm[i - 1] = fetchFilm[i]
+                            fetchFilmId[i - 1] = fetchFilmId[i]
+            
+                            fetchFilm[i] = tmpPopularity
+                            fetchFilmId[i] = tmpid
+                        }
                     }
-
+                }else {
+                    for(var i = 1; i < fetchFilm.length; i++) {
+                        if (fetchFilm[i - 1] < fetchFilm[i]) {
+                            done = false
+                            var tmpPopularity = fetchFilm[i - 1]
+                            var tmpid = fetchFilmId[i - 1]
+            
+                            fetchFilm[i - 1] = fetchFilm[i]
+                            fetchFilmId[i - 1] = fetchFilmId[i]
+            
+                            fetchFilm[i] = tmpPopularity
+                            fetchFilmId[i] = tmpid
+                        }
+                    }
                 }
-                console.log('popularité : ' ,fetchFilm)
-                console.log('le id : ' ,fetchFilmId)
+
             }
             // On affiche
             for (var i = 0; i < fetchFilm.length; i++) {
@@ -367,22 +447,37 @@ function getPopularityIfGenre() {
                 var done = false
                 while(!done) {
                     done = true
-                    for(var i = 1; i < fetchFilm.length; i++) {
+                    if(isCroissant == true) {
+                        for(var i = 1; i < fetchFilm.length; i++) {
 
-                        if (fetchFilm[i - 1] > fetchFilm[i]) {
-                            done = false
-                            var tmpPopularity = fetchFilm[i - 1]
-                            var tmpid = fetchFilmId[i - 1]
-            
-                            fetchFilm[i - 1] = fetchFilm[i]
-                            fetchFilmId[i - 1] = fetchFilmId[i]
-            
-                            fetchFilm[i] = tmpPopularity
-                            fetchFilmId[i] = tmpid
+                            if (fetchFilm[i - 1] > fetchFilm[i]) {
+                                done = false
+                                var tmpPopularity = fetchFilm[i - 1]
+                                var tmpid = fetchFilmId[i - 1]
+                
+                                fetchFilm[i - 1] = fetchFilm[i]
+                                fetchFilmId[i - 1] = fetchFilmId[i]
+                
+                                fetchFilm[i] = tmpPopularity
+                                fetchFilmId[i] = tmpid
+                            }
+                        }
+                    }else {
+                        for(var i = 1; i < fetchFilm.length; i++) {
+
+                            if (fetchFilm[i - 1] < fetchFilm[i]) {
+                                done = false
+                                var tmpPopularity = fetchFilm[i - 1]
+                                var tmpid = fetchFilmId[i - 1]
+                
+                                fetchFilm[i - 1] = fetchFilm[i]
+                                fetchFilmId[i - 1] = fetchFilmId[i]
+                
+                                fetchFilm[i] = tmpPopularity
+                                fetchFilmId[i] = tmpid
+                            }
                         }
                     }
-                    console.log("popularité : " ,fetchFilm)
-                    console.log("l'id du film : " ,fetchFilmId)
                 }
 
                 // On affiche
@@ -396,6 +491,43 @@ function getPopularityIfGenre() {
         })
     }
 }
+
+// ------------------------------- TRI PAR CLASSIFICATION (pas parfait) ------------------------- //
+
+function checkClassification(url) {
+
+    fetch(url)
+        .then((response) => 
+            response.json())
+        .then(function(data) {
+            data.results.forEach(region => {
+                if(region.iso_3166_1 == "FR") {
+                    if(currentClassification == '') {
+                        if(region.release_dates[0].certification == 'U' || region.release_dates[0].certification == 'G' || region.release_dates[0].certification == '') {
+                            console.log("test")
+                            return true
+                        }
+                    }else if(currentClassification == '12') {
+                        if(region.release_dates[0].certification == 'PG-13' || region.release_dates[0].certification == 'G' || region.release_dates[0].certification == '12A' || region.release_dates[0].certification == '12') {
+                            return true
+                        }
+                    }else if(currentClassification == '16') {
+                        if(region.release_dates[0].certification == 'R' || region.release_dates[0].certification == '15' || region.release_dates[0].certification == 'M15+' || region.release_dates[0].certification == '16') {
+                            return true
+                        }
+                    }else if(currentClassification == '18') {
+                        if(region.release_dates[0].certification == 'X' || region.release_dates[0].certification == '18' || region.release_dates[0].certification == 'R18+') {
+                            return true
+                        }
+                    }else {
+                        return false
+                    }
+
+                }
+            })
+        })
+}
+console.log(checkClassification("https://api.themoviedb.org/3/movie/76600/release_dates?api_key=4d96b3b4809a91b441704c4ff361ba94"))
 
 // -------------------------------------- AUTRES ------------------------------------ //
 
@@ -443,7 +575,7 @@ function bubbleSort(array) {
     while (!done) {
       done = true;
       for (var i = 1; i < array.length; i += 1) {
-        if (array[i - 1] > array[i]) {
+        if (array[i - 1] < array[i]) {
           done = false;
           var tmp = array[i - 1];
           array[i - 1] = array[i];

@@ -40,7 +40,16 @@
         <option value="avis">Avis</option>
         <option value="popularite">Popularité</option>
     </select>
-    <button class="croissant border-solid border-blue-200 border-4">Croissant</button>
+
+    <button id="croissantBtn" class="croissant border-solid border-blue-200 border-4">Croissant</button>
+
+    <label for="">Limite d'age</label>
+    <select id="" class="limiteAge">
+        <option value="">Tout public</option>
+        <option value="12">12+</option>
+        <option value="16">16+</option>
+        <option value="18">18+</option>
+    </select>
 
     <button class="searchButton">Chercher</button>
 

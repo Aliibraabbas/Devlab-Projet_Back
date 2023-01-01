@@ -189,7 +189,7 @@ function showAllFilm(url) {
         data.results.forEach(film => {
     
             moovie.innerHTML += `
-                <a href="../page/onepage_moovie.php?id=${film.id}">
+                <a href="./onepage.php?id=${film.id}">
                     <div class="rounded-3xl relative">
                         <img src="${"https://image.tmdb.org/t/p/original" + film.backdrop_path}" alt="" class="rounded-3xl w-full">
                         <h2 class="p-2 text-xl absolute left-0 bottom-0 bg-orange-500 w-full rounded-b-3xl">${film.title}</h2>

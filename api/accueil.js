@@ -185,6 +185,7 @@ function showAllFilm(url) {
         response.json())
 
     .then(function(data) {
+        console.log(data)
 
         data.results.forEach(film => {
     
@@ -197,6 +198,27 @@ function showAllFilm(url) {
                 </a>
                 `
         })
+
+    })
+
+}
+
+function showAllFilmSearch(url) {
+
+    // Affiche tout les films
+    fetch(url)
+    .then((response) => 
+        response.json())
+
+    .then(function(data) {
+        moovie.innerHTML += `
+            <a href="onepage.php?id=${data.id}">
+                <div class="rounded-3xl relative">
+                    <img src="${"https://image.tmdb.org/t/p/original" + data.backdrop_path}" alt="" class="rounded-3xl w-full">
+                    <h2 class="p-2 text-xl absolute left-0 bottom-0 bg-orange-500 w-full rounded-b-3xl">${data.title}</h2>
+                </div>
+            </a>
+            `
 
     })
 
@@ -531,7 +553,6 @@ function checkClassification(url) {
 // console.log(checkClassification("https://api.themoviedb.org/3/movie/76600/release_dates?api_key=4d96b3b4809a91b441704c4ff361ba94"))
 
 // ------------------------------- Search de film (axios) ------------------------- //
-
 let searchText = document.getElementById("inputSearch")
 console.log(searchText)
 let searchTextValue = ""
@@ -543,11 +564,22 @@ searchText.addEventListener('keydown', function(){
 
 let buttonSearch = document.querySelector('.buttonWriteSearch')
 buttonSearch.addEventListener('click', function() {
-    console.log(searchText.value)
+    searchForFilm()
 })
 
-function searchForFilm(url) {
-    var query = "https://api.themoviedb.org/3/search/movie?api_key=4d96b3b4809a91b441704c4ff361ba94&language=fr-FR&query=" + searchTextValue
+function searchForFilm() {
+    var query = "https://api.themoviedb.org/3/search/movie?api_key=4d96b3b4809a91b441704c4ff361ba94&language=fr-FR&query=" + searchText.value
+    axios.get(query).then(function(response) {
+        resetInnerHTML(trending)
+        response.data.results.forEach(film => {
+            if(film.backdrop_path != null) {
+                let newUrl = "https://api.themoviedb.org/3/movie/" + film.id + "?api_key=4d96b3b4809a91b441704c4ff361ba94&language=fr-FR"
+                showAllFilmSearch(newUrl)
+            }
+        })
+    }).catch(function(error) {
+        console.log(error)
+    })
 }
 
 // -------------------------------------- AUTRES ------------------------------------ //

@@ -1,7 +1,29 @@
 {
   "devDependencies": {
     "autoprefixer": "^10.4.13",
+    "parcel-bundler": "^1.12.5",
     "postcss": "^8.4.20",
     "tailwindcss": "^3.2.4"
+  },
+  "name": "devlab-projet_back",
+  "description": "",
+  "version": "1.0.0",
+  "main": "postcss.config.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Aliibraabbas/Devlab-Projet_Back.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Aliibraabbas/Devlab-Projet_Back/issues"
+  },
+  "homepage": "https://github.com/Aliibraabbas/Devlab-Projet_Back#readme",
+  "dependencies": {
+    "axios": "^0.21.1"
   }
 }

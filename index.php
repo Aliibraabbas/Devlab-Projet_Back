@@ -62,6 +62,7 @@
 
 
     <script src="api/accueil.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
     <?php 
      include_once 'footer.php'

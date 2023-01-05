@@ -82,6 +82,7 @@ classification.addEventListener("click", function() {
     }
 })
 
+// ------------------- Boutton qui lance l'affichafe des films ----------------------------------- //
 let searchButton = document.querySelector(".searchButton")
 searchButton.addEventListener("click", function() {
 
@@ -111,7 +112,6 @@ searchButton.addEventListener("click", function() {
                 resetInnerHTML(trending)
                 triFilmNameGenreId()
             }else if(currentTri == "popularite") {
-                console.log('jhajhajha')
                 resetInnerHTML(trending)
                 getPopularityIfGenre()
             }
@@ -161,7 +161,7 @@ function showFilmByGenre(url) {
                         data.genres.forEach(result => {
                             if(result.name == currentGenre) {
                                 moovie.innerHTML += `
-                                    <a href="../page/onepage_moovie.php?id=${data.id}">
+                                    <a href="onepage.php?id=${data.id}">
                                         <div class="rounded-3xl relative">
                                             <img src="${"https://image.tmdb.org/t/p/original" + data.backdrop_path}" alt="" class="rounded-3xl w-full">
                                             <h2 class="p-2 text-xl absolute left-0 bottom-0 bg-orange-500 w-full rounded-b-3xl">${data.title}</h2>
@@ -189,7 +189,7 @@ function showAllFilm(url) {
         data.results.forEach(film => {
     
             moovie.innerHTML += `
-                <a href="./onepage.php?id=${film.id}">
+                <a href="onepage.php?id=${film.id}">
                     <div class="rounded-3xl relative">
                         <img src="${"https://image.tmdb.org/t/p/original" + film.backdrop_path}" alt="" class="rounded-3xl w-full">
                         <h2 class="p-2 text-xl absolute left-0 bottom-0 bg-orange-500 w-full rounded-b-3xl">${film.title}</h2>
@@ -213,7 +213,7 @@ function showAllFilmFilter(url) {
     .then(function(data) {
 
         moovie.innerHTML += `
-            <a href="../page/onepage_moovie.php?id=${data.id}">
+            <a href="onepage.php?id=${data.id}">
                 <div class="rounded-3xl relative">
                     <img src="${"https://image.tmdb.org/t/p/original" + data.backdrop_path}" alt="" class="rounded-3xl w-full">
                     <h2 class="p-2 text-xl absolute left-0 bottom-0 bg-orange-500 w-full rounded-b-3xl">${data.title}</h2>
@@ -300,6 +300,7 @@ function triFilmNameGenreId() {
     var fetchFilmId = []
     let limite = 0
 
+    // on check tout les films
     for(var i = 0; i < allFilmId.length; i++) {
         let film = "https://api.themoviedb.org/3/movie/" + allFilmId[i] + "?api_key=4d96b3b4809a91b441704c4ff361ba94&language=fr-FR"
         fetch(film)
@@ -527,7 +528,27 @@ function checkClassification(url) {
             })
         })
 }
-console.log(checkClassification("https://api.themoviedb.org/3/movie/76600/release_dates?api_key=4d96b3b4809a91b441704c4ff361ba94"))
+// console.log(checkClassification("https://api.themoviedb.org/3/movie/76600/release_dates?api_key=4d96b3b4809a91b441704c4ff361ba94"))
+
+// ------------------------------- Search de film (axios) ------------------------- //
+
+let searchText = document.getElementById("inputSearch")
+console.log(searchText)
+let searchTextValue = ""
+searchText.addEventListener('keydown', function(){
+    if(searchText.value != searchTextValue) {
+        searchTextValue = searchText.value
+    }
+})
+
+let buttonSearch = document.querySelector('.buttonWriteSearch')
+buttonSearch.addEventListener('click', function() {
+    console.log(searchText.value)
+})
+
+function searchForFilm(url) {
+    var query = "https://api.themoviedb.org/3/search/movie?api_key=4d96b3b4809a91b441704c4ff361ba94&language=fr-FR&query=" + searchTextValue
+}
 
 // -------------------------------------- AUTRES ------------------------------------ //
 

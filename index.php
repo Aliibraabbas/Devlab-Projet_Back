@@ -32,7 +32,7 @@
     <select id="catego" class="genre">
         <option value="">Aucun</option>
         <option value="Action">Action</option>
-        <option value="Adventure">Aventure</option>
+        <option value="Aventure">Aventure</option>
         <option value="Animation">Animation</option>
         <option value="Crime">Crime</option>
         <option value="Policier">Policier</option>
@@ -44,6 +44,7 @@
         <option value="nom">Nom</option>
         <option value="avis">Avis</option>
         <option value="popularite">Popularité</option>
+        <option value="note">Note</option>
     </select>
 
     <button id="croissantBtn" class="croissant border-solid border-blue-200 border-4">Croissant</button>

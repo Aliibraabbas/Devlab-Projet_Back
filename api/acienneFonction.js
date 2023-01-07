@@ -78,8 +78,6 @@ function triFilmName(url) {
 ////////////////////////////////////////////////////////
 
 
-
-
 // On trie par popularité croissante
 let sortedFilmPopularity = []
 let sortedFilmName = []
@@ -118,3 +116,69 @@ newUrl.forEach(url => {
 
     })
 })
+
+function getAvis(url) {
+    // On recupre tout les url de details pour avoir la popularité des films
+    fetch(url)
+        .then((response) => 
+            response.json())
+
+        .then(function(data) {
+
+            var fetchFilm = []
+            var fetchFilmId = []
+            limite = 0
+            for (var i = 0; i < data.results.length; i++) {
+                fetchFilmId.push(data.results[i].id)
+            }
+            for(var i = 0; i < allFilmId.length; i++) {
+                let filmReview = "https://api.themoviedb.org/3/movie/"+ fetchFilmId[i] +"/reviews?api_key=4d96b3b4809a91b441704c4ff361ba94&language=fr-FR"
+                
+            }
+
+
+            // var done = false
+            // while(!done) {
+            //     console.log(fetchFilm.length)
+            //     done = true
+            //     if(isCroissant == true) {
+            //         for(var i = 1; i < fetchFilm.length; i++) {
+            //             if (fetchFilm[i - 1] > fetchFilm[i]) {
+            //                 done = false
+            //                 var tmpPopularity = fetchFilm[i - 1]
+            //                 var tmpid = fetchFilmId[i - 1]
+            
+            //                 fetchFilm[i - 1] = fetchFilm[i]
+            //                 fetchFilmId[i - 1] = fetchFilmId[i]
+            
+            //                 fetchFilm[i] = tmpPopularity
+            //                 fetchFilmId[i] = tmpid
+            //             }
+            //         }
+            //     }else {
+            //         for(var i = 1; i < fetchFilm.length; i++) {
+            //             if (fetchFilm[i - 1] < fetchFilm[i]) {
+            //                 done = false
+            //                 var tmpPopularity = fetchFilm[i - 1]
+            //                 var tmpid = fetchFilmId[i - 1]
+            
+            //                 fetchFilm[i - 1] = fetchFilm[i]
+            //                 fetchFilmId[i - 1] = fetchFilmId[i]
+            
+            //                 fetchFilm[i] = tmpPopularity
+            //                 fetchFilmId[i] = tmpid
+            //             }
+            //         }
+            //     }
+            // }
+            // console.log(fetchFilm)
+            // console.log(fetchFilmId)
+
+            // On affiche
+            // for (var i = 0; i < fetchFilm.length; i++) {
+            //     let newUrl = "https://api.themoviedb.org/3/movie/" + fetchFilmId[i] + "?api_key=4d96b3b4809a91b441704c4ff361ba94&language=fr-FR"
+            //     showAllFilmFilter(newUrl)
+            // }
+        })
+
+}

@@ -85,54 +85,59 @@ classification.addEventListener("click", function() {
 // ------------------- Boutton qui lance l'affichafe des films ----------------------------------- //
 let searchButton = document.querySelector(".searchButton")
 searchButton.addEventListener("click", function() {
-
-    // Affiche tout les films si il n'y a pas de genre choisit
-    if(currentGenre == ""){
-        // Si il n'y a pas de tri choisit
-        if(currentTri == "") {
-            // il n'y a pas de lcassification
-            if(currentClassification == ""){
+    if(currentClassification != "" && currentGenre == "" && currentTri == "") {
+        resetInnerHTML(trending)
+        for(var i = 0; i < allFilmId.length; i++) {
+            checkClassification("https://api.themoviedb.org/3/movie/"+ allFilmId[i] +"/release_dates?api_key=4d96b3b4809a91b441704c4ff361ba94")
+        }
+    }else{
+        classification.value = ""
+        // Affiche tout les films si il n'y a pas de genre choisit
+        if(currentGenre == ""){
+            // Si il n'y a pas de tri choisit
+            if(currentTri == "") {
                 resetInnerHTML(trending)
                 showAllFilm(trending)
+            }else {
+                if(currentTri == "nom") {
+                    resetInnerHTML(trending)
+                    triFilm(trending, "nom")
+                }else if(currentTri == "popularite") {
+                    resetInnerHTML(trending)
+                    triFilm(trending, "popularite")
+                }else if(currentTri == "avis") {
+                    resetInnerHTML(trending)
+                    getAvis(trending)
+                }else if(currentTri == "note") {
+                    resetInnerHTML(trending)
+                    triFilm(trending, "note")
+                }
             }
-        }else {
-            if(currentTri == "nom") {
-                resetInnerHTML(trending)
-                triFilm(trending, "nom")
-            }else if(currentTri == "popularite") {
-                resetInnerHTML(trending)
-                triFilm(trending, "popularite")
-            }else if(currentTri == "avis") {
-                resetInnerHTML(trending)
-                getAvis(trending)
-            }else if(currentTri == "note") {
-                resetInnerHTML(trending)
-                triFilm(trending, "note")
-            }
-        }
 
-    // Sinon affiche en fonction du genre choisit
-    }else {
-        if(currentTri == "") {
-            resetInnerHTML(trending)
-            showFilmByGenre(trending)
+        // Sinon affiche en fonction du genre choisit
         }else {
-            if(currentTri == "nom") {
+            if(currentTri == "") {
                 resetInnerHTML(trending)
-                triFilmGenre("nom")
-            }else if(currentTri == "popularite") {
-                resetInnerHTML(trending)
-                triFilmGenre("popularite")
-            }else if(currentTri == "note") {
-                resetInnerHTML(trending)
-                triFilmGenre("note")
+                showFilmByGenre(trending)
+            }else {
+                if(currentTri == "nom") {
+                    resetInnerHTML(trending)
+                    triFilmGenre("nom")
+                }else if(currentTri == "popularite") {
+                    resetInnerHTML(trending)
+                    triFilmGenre("popularite")
+                }else if(currentTri == "note") {
+                    resetInnerHTML(trending)
+                    triFilmGenre("note")
+                }
+                // else if(currentTri == "avis") {
+                //     resetInnerHTML(trending)
+                //     getAvisGenre(trending)
+                // }
             }
-            // else if(currentTri == "avis") {
-            //     resetInnerHTML(trending)
-            //     getAvisGenre(trending)
-            // }
         }
     }
+
 })
 
 // Remet le html a blanc
@@ -167,7 +172,6 @@ function showFilmByGenre(url) {
             // On recupere la page detail de tout les films grace a leur id et on verifie si leur genre correspond au genre choisit
             allFilmId.forEach(film_id => {
                 let film = "https://api.themoviedb.org/3/movie/" + film_id + "?api_key=4d96b3b4809a91b441704c4ff361ba94&language=fr-FR"
-                let filmClassification = "https://api.themoviedb.org/3/movie/"+ film_id +"/release_dates?api_key=4d96b3b4809a91b441704c4ff361ba94"
                 
                 fetch(film)
                     .then((response) => 
@@ -249,6 +253,7 @@ function showAllFilmFilter(url) {
 
     .then(function(data) {
 
+        console.log(data.id, data.title)
         moovie.innerHTML += `
             <a href="onepage.php?id=${data.id}">
                 <div class="rounded-3xl relative">
@@ -418,33 +423,33 @@ function triFilmGenre(whichTri) {
 
 // ------------------------------- TRI PAR CLASSIFICATION (pas parfait) ------------------------- //
 
-function checkClassification(url, url2, whichTri) {
+function checkClassification(url) {
 
     fetch(url)
-        .then(console.log("hjehjdjf"))
         .then((response) => 
             response.json())
         .then(function(data) {
             data.results.forEach(region => {
                 if(region.iso_3166_1 == "FR") {
-                    console.log('verif')
-                    if(currentClassification == '') {
-                        console.log('verif2')
+                    if(currentClassification == 'all') {
                         if(region.release_dates[0].certification == 'U' || region.release_dates[0].certification == 'G' || region.release_dates[0].certification == '') {
-                            console.log("test")
-                            triFilm(url2, whichTri)
+                            let newUrl = "https://api.themoviedb.org/3/movie/" + data.id + "?api_key=4d96b3b4809a91b441704c4ff361ba94&language=fr-FR"
+                            showAllFilmFilter(newUrl)
                         }
                     }else if(currentClassification == '12') {
                         if(region.release_dates[0].certification == 'PG-13' || region.release_dates[0].certification == 'G' || region.release_dates[0].certification == '12A' || region.release_dates[0].certification == '12') {
-                            return true
+                            let newUrl = "https://api.themoviedb.org/3/movie/" + data.id + "?api_key=4d96b3b4809a91b441704c4ff361ba94&language=fr-FR"
+                            showAllFilmFilter(newUrl)
                         }
                     }else if(currentClassification == '16') {
                         if(region.release_dates[0].certification == 'R' || region.release_dates[0].certification == '15' || region.release_dates[0].certification == 'M15+' || region.release_dates[0].certification == '16') {
-                            return true
+                            let newUrl = "https://api.themoviedb.org/3/movie/" + data.id + "?api_key=4d96b3b4809a91b441704c4ff361ba94&language=fr-FR"
+                            showAllFilmFilter(newUrl)
                         }
                     }else if(currentClassification == '18') {
                         if(region.release_dates[0].certification == 'X' || region.release_dates[0].certification == '18' || region.release_dates[0].certification == 'R18+') {
-                            return true
+                            let newUrl = "https://api.themoviedb.org/3/movie/" + data.id + "?api_key=4d96b3b4809a91b441704c4ff361ba94&language=fr-FR"
+                            showAllFilmFilter(newUrl)
                         }
                     }else {
                         return false
@@ -476,6 +481,7 @@ function searchForFilm() {
     var query = "https://api.themoviedb.org/3/search/movie?api_key=4d96b3b4809a91b441704c4ff361ba94&language=fr-FR&query=" + searchText.value
     axios.get(query).then(function(response) {
         resetInnerHTML(trending)
+        console.log(response.data.results)
         response.data.results.forEach(film => {
             if(film.backdrop_path != null) {
                 let newUrl = "https://api.themoviedb.org/3/movie/" + film.id + "?api_key=4d96b3b4809a91b441704c4ff361ba94&language=fr-FR"

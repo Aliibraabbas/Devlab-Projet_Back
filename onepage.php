@@ -38,9 +38,18 @@
                     <div class="name acteur-name-2"></div>
                 </div>
             </div>
+
+            <div class="buttons">
+                <button class="visionne">Visioné</button>
+                <button class="like">Like</button>
+            </div>
         </div>
     </div>
 
     <script src="./api/onepage.js"></script>
+
+    <?php 
+     include_once 'footer.php'
+    ?>
 </body>
 </html>

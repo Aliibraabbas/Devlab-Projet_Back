@@ -189,3 +189,28 @@
   font-size: 14px;
   font-weight: bold;
 }
+
+.buttons {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  margin-top: 2em;
+}
+
+.visionne,
+.like {
+  border: none;
+  text-align: center;
+  font-size: 16px;
+  border-radius: 25px;
+  width: 25%;
+  height: 3em;
+  box-shadow: 0px 15px 20px rgba(46, 229, 157, 0.4);
+}
+
+.like {
+  background-color: red;
+}
+.visionne {
+  background-color: yellow;
+}

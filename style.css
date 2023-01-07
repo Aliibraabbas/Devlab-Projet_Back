@@ -134,6 +134,9 @@
 .container {
   display: flex;
   align-items: center;
+  gap: 10em;
+  margin-top: 5em;
+  margin-inline: 1em;
 }
 
 .poster {
@@ -159,6 +162,7 @@
 .actors {
   display: flex;
   flex-wrap: wrap;
+  gap: 1em;
 }
 
 .actor {
@@ -168,6 +172,11 @@
   border-radius: 10px;
   background-color: #eee;
   padding: 10px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .actor img {

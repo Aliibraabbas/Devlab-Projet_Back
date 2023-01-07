@@ -129,3 +129,54 @@
     font-weight: bold;
   }
  
+/* ----------------------- ONE PAGE -------------------------- */
+
+.container {
+  display: flex;
+  align-items: center;
+}
+
+.poster {
+  width: 30%;
+  margin-right: 20px;
+}
+
+.info {
+  width: 60%;
+}
+
+.title {
+  font-size: 32px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.description {
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+.actors {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.actor {
+  width: 25%;
+  text-align: center;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  background-color: #eee;
+  padding: 10px;
+}
+
+.actor img {
+  width: 70%;
+  border-radius: 25%;
+  margin-bottom: 10px;
+}
+
+.actor .name {
+  font-size: 14px;
+  font-weight: bold;
+}

@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
     <title>Document</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <?php
@@ -14,7 +15,27 @@
     <h1 class="test"></h1>
     <input type="hidden" value="<?php echo $id ?>" class="filmId">
 
-    <div class="moovie w-full flex justify-center item-center mt-10"></div>
+    <div class="container">
+        <img src="" alt="" class="poster" id="poster">
+        <div class="info">
+            <div class="title">
+
+            </div>
+            <div class="description">
+
+            </div>
+            <div class="actors">
+                <div class="actor">
+                    <img src="#" alt="Acteur 1" id="acteur-1">
+                    <div class="name acteur-name-1"></div>
+                </div>
+                <div class="actor">
+                    <img src="#" alt="Acteur 2" id="acteur-2">
+                    <div class="name acteur-name-2"></div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script src="./api/onepage.js"></script>
 </body>

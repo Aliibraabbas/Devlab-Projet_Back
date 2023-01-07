@@ -51,7 +51,8 @@
 
     <label for="">Limite d'age</label>
     <select id="" class="limiteAge">
-        <option value="">Tout public</option>
+        <option value="">Aucun</option>
+        <option value="all">Tout public</option>
         <option value="12">12+</option>
         <option value="16">16+</option>
         <option value="18">18+</option>

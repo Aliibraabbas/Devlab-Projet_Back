@@ -88,23 +88,26 @@ searchButton.addEventListener("click", function() {
 
     // Affiche tout les films si il n'y a pas de genre choisit
     if(currentGenre == ""){
-        // Si il n'y a pas de try choisit
+        // Si il n'y a pas de tri choisit
         if(currentTri == "") {
-            resetInnerHTML(trending)
-            showAllFilm(trending)
+            // il n'y a pas de lcassification
+            if(currentClassification == ""){
+                resetInnerHTML(trending)
+                showAllFilm(trending)
+            }
         }else {
             if(currentTri == "nom") {
                 resetInnerHTML(trending)
-                triFilmNameId(trending)
+                triFilm(trending, "nom")
             }else if(currentTri == "popularite") {
                 resetInnerHTML(trending)
-                getPopularity(trending)
+                triFilm(trending, "popularite")
             }else if(currentTri == "avis") {
                 resetInnerHTML(trending)
                 getAvis(trending)
             }else if(currentTri == "note") {
                 resetInnerHTML(trending)
-                getNote(trending)
+                triFilm(trending, "note")
             }
         }
 
@@ -116,13 +119,13 @@ searchButton.addEventListener("click", function() {
         }else {
             if(currentTri == "nom") {
                 resetInnerHTML(trending)
-                triFilmNameGenreId()
+                triFilmGenre("nom")
             }else if(currentTri == "popularite") {
                 resetInnerHTML(trending)
-                getPopularityIfGenre()
+                triFilmGenre("popularite")
             }else if(currentTri == "note") {
                 resetInnerHTML(trending)
-                getNoteIfGenre()
+                triFilmGenre("note")
             }
             // else if(currentTri == "avis") {
             //     resetInnerHTML(trending)
@@ -256,6 +259,426 @@ function showAllFilmFilter(url) {
             `
     })
 
+}
+
+// --------------------- FONCTION DE TRI COMMUNE --------------------- //
+
+function triFilm(url, whichTri) {
+    fetch(url)
+        .then((response) => 
+            response.json())
+
+        .then(function(data) {
+            var fetchFilm = []
+            var fetchFilmId = []
+
+            if(whichTri == "nom") {
+                for (var i = 0; i < data.results.length; i++) {
+                    fetchFilm.push(data.results[i].title)
+                    fetchFilmId.push(data.results[i].id)
+                }
+            }else if(whichTri == "popularite") {
+                for (var i = 0; i < data.results.length; i++) {
+                    fetchFilm.push(data.results[i].popularity)
+                    fetchFilmId.push(data.results[i].id)
+                }
+            }else if(whichTri == "note") {
+                for (var i = 0; i < data.results.length; i++) {
+                    fetchFilm.push(data.results[i].vote_average)
+                    fetchFilmId.push(data.results[i].id)
+                }
+            }
+
+            var done = false
+            while(!done) {
+                done = true
+                if(isCroissant == true) {
+                    for(var i = 1; i < fetchFilm.length; i++) {
+
+                        if (fetchFilm[i - 1] > fetchFilm[i]) {
+                            done = false
+                            var tmpPopularity = fetchFilm[i - 1]
+                            var tmpid = fetchFilmId[i - 1]
+            
+                            fetchFilm[i - 1] = fetchFilm[i]
+                            fetchFilmId[i - 1] = fetchFilmId[i]
+            
+                            fetchFilm[i] = tmpPopularity
+                            fetchFilmId[i] = tmpid
+                        }
+                    }
+                }else {
+                    console.log("decroissant")
+                    for(var i = 1; i < fetchFilm.length; i++) {
+
+                        if (fetchFilm[i - 1] < fetchFilm[i]) {
+                            done = false
+                            var tmpPopularity = fetchFilm[i - 1]
+                            var tmpid = fetchFilmId[i - 1]
+            
+                            fetchFilm[i - 1] = fetchFilm[i]
+                            fetchFilmId[i - 1] = fetchFilmId[i]
+            
+                            fetchFilm[i] = tmpPopularity
+                            fetchFilmId[i] = tmpid
+                        }
+                    }
+                }
+
+                // console.log(fetchFilm)
+                // console.log(fetchFilmId)
+                
+            }
+            // On affiche
+            for (var i = 0; i < fetchFilm.length; i++) {
+                let newUrl = "https://api.themoviedb.org/3/movie/" + fetchFilmId[i] + "?api_key=4d96b3b4809a91b441704c4ff361ba94&language=fr-FR"
+                showAllFilmFilter(newUrl)
+            }
+        })
+}
+
+function triFilmGenre(whichTri) {
+    var fetchFilm = []
+    var fetchFilmId = []
+    let limite = 0
+
+    // on check tout les films
+    for(var i = 0; i < allFilmId.length; i++) {
+        let film = "https://api.themoviedb.org/3/movie/" + allFilmId[i] + "?api_key=4d96b3b4809a91b441704c4ff361ba94&language=fr-FR"
+        fetch(film)
+            .then((response) => 
+                response.json())
+            .then(function(data) {
+                data.genres.forEach(result => {
+                    // On remplie les tableaux
+                    if(result.name == currentGenre) {
+                        if(whichTri == "nom") {
+                            fetchFilm.push(data.title)
+                            fetchFilmId.push(data.id)
+                        }else if(whichTri == "popularite") {
+                            fetchFilm.push(data.popularity)
+                            fetchFilmId.push(data.id)
+                        }else if(whichTri == "note") {
+                            fetchFilm.push(data.vote_average)
+                            fetchFilmId.push(data.id)
+                        }
+                    }
+                })
+                // Mtn on trie
+                var done = false
+                while(!done) {
+                    done = true
+                    if(isCroissant == true) {
+                        for(var i = 1; i < fetchFilm.length; i++) {
+
+                            if (fetchFilm[i - 1] > fetchFilm[i]) {
+                                done = false
+                                var tmpPopularity = fetchFilm[i - 1]
+                                var tmpid = fetchFilmId[i - 1]
+                
+                                fetchFilm[i - 1] = fetchFilm[i]
+                                fetchFilmId[i - 1] = fetchFilmId[i]
+                
+                                fetchFilm[i] = tmpPopularity
+                                fetchFilmId[i] = tmpid
+                            }
+                        }
+                    }else {
+                        for(var i = 1; i < fetchFilm.length; i++) {
+
+                            if (fetchFilm[i - 1] < fetchFilm[i]) {
+                                done = false
+                                var tmpPopularity = fetchFilm[i - 1]
+                                var tmpid = fetchFilmId[i - 1]
+                
+                                fetchFilm[i - 1] = fetchFilm[i]
+                                fetchFilmId[i - 1] = fetchFilmId[i]
+                
+                                fetchFilm[i] = tmpPopularity
+                                fetchFilmId[i] = tmpid
+                            }
+                        }
+                    }
+                }
+                    
+
+                // On affiche
+                limite += 1
+                if(limite == allFilmId.length) {
+                    for (var i = 0; i < fetchFilm.length; i++) {
+                        let newUrl = "https://api.themoviedb.org/3/movie/" + fetchFilmId[i] + "?api_key=4d96b3b4809a91b441704c4ff361ba94&language=fr-FR"
+                        showAllFilmFilter(newUrl)
+                    }
+                }
+        })
+    }
+    
+}
+
+
+// ------------------------------- TRI PAR CLASSIFICATION (pas parfait) ------------------------- //
+
+function checkClassification(url, url2, whichTri) {
+
+    fetch(url)
+        .then(console.log("hjehjdjf"))
+        .then((response) => 
+            response.json())
+        .then(function(data) {
+            data.results.forEach(region => {
+                if(region.iso_3166_1 == "FR") {
+                    console.log('verif')
+                    if(currentClassification == '') {
+                        console.log('verif2')
+                        if(region.release_dates[0].certification == 'U' || region.release_dates[0].certification == 'G' || region.release_dates[0].certification == '') {
+                            console.log("test")
+                            triFilm(url2, whichTri)
+                        }
+                    }else if(currentClassification == '12') {
+                        if(region.release_dates[0].certification == 'PG-13' || region.release_dates[0].certification == 'G' || region.release_dates[0].certification == '12A' || region.release_dates[0].certification == '12') {
+                            return true
+                        }
+                    }else if(currentClassification == '16') {
+                        if(region.release_dates[0].certification == 'R' || region.release_dates[0].certification == '15' || region.release_dates[0].certification == 'M15+' || region.release_dates[0].certification == '16') {
+                            return true
+                        }
+                    }else if(currentClassification == '18') {
+                        if(region.release_dates[0].certification == 'X' || region.release_dates[0].certification == '18' || region.release_dates[0].certification == 'R18+') {
+                            return true
+                        }
+                    }else {
+                        return false
+                    }
+
+                }
+            })
+        })
+}
+
+// console.log(currentClassification)
+// console.log('aaaaaaa' , checkClassification("https://api.themoviedb.org/3/movie/76600/release_dates?api_key=4d96b3b4809a91b441704c4ff361ba94"))
+
+// ------------------------------- Search de film (axios) ------------------------- //
+let searchText = document.getElementById("inputSearch")
+let searchTextValue = ""
+searchText.addEventListener('keydown', function(){
+    if(searchText.value != searchTextValue) {
+        searchTextValue = searchText.value
+    }
+})
+
+let buttonSearch = document.querySelector('.buttonWriteSearch')
+buttonSearch.addEventListener('click', function() {
+    searchForFilm()
+})
+
+function searchForFilm() {
+    var query = "https://api.themoviedb.org/3/search/movie?api_key=4d96b3b4809a91b441704c4ff361ba94&language=fr-FR&query=" + searchText.value
+    axios.get(query).then(function(response) {
+        resetInnerHTML(trending)
+        response.data.results.forEach(film => {
+            if(film.backdrop_path != null) {
+                let newUrl = "https://api.themoviedb.org/3/movie/" + film.id + "?api_key=4d96b3b4809a91b441704c4ff361ba94&language=fr-FR"
+                showAllFilmSearch(newUrl)
+            }
+        })
+    }).catch(function(error) {
+        console.log(error)
+    })
+}
+
+// -------------------------------------- AUTRES ------------------------------------ //
+
+function writeTitle(filmName) {
+    let newTitle = ""
+    for (var i = 0; i < filmName.length; i++) {
+        if(filmName.charAt(i) == " "){
+            newTitle += "+"
+        }else{
+            newTitle += filmName.charAt(i)
+        }
+    }
+    // (newTitle)
+
+    // console.log("https://api.themoviedb.org/3/search/movie?api_key=4d96b3b4809a91b441704c4ff361ba94&language=fr-FR&query=" + newTitle)
+    return("https://api.themoviedb.org/3/search/movie?api_key=4d96b3b4809a91b441704c4ff361ba94&language=fr-FR&query=" + newTitle)
+}
+
+function getFilmDetailUrl(url) {
+    let newUrl = []
+    fetch(url)
+        .then((response) => 
+            response.json())
+
+        .then(function(data) {
+            var fetchFilm = []
+            // console.log("pas de genre")
+            for (var i = 0; i < data.results.length; i++) {
+                fetchFilm.push(data.results[i].title)
+            }
+            fetchFilm.sort()
+            // On affiche
+            for (var i = 0; i < fetchFilm.length; i++) {
+                newUrl.push(writeTitle(fetchFilm[i]))
+            }
+            return(newUrl)
+        })
+
+}
+
+function bubbleSort(array) {
+    var done = false;
+    while (!done) {
+      done = true;
+      for (var i = 1; i < array.length; i += 1) {
+        if (array[i - 1] < array[i]) {
+          done = false;
+          var tmp = array[i - 1];
+          array[i - 1] = array[i];
+          array[i] = tmp;
+        }
+      }
+    }
+  
+    return array;
+  }
+  
+var numbers = [12, 10, 15, 11, 14, 13, 16];
+bubbleSort(numbers);
+// console.log("le sort mano :" , numbers);
+
+
+
+
+// ----------------------------------------------------------------------------------------------------------------------------------------- //
+// ----------------------------------------------------------------------------------------------------------------------------------------- //
+
+// -------------------------------- TRI PAR NOTE ---------------------- //
+
+function getNote(url) {
+    fetch(url)
+    .then((response) => 
+        response.json())
+
+    .then(function(data) {
+        var fetchFilm = []
+        var fetchFilmId = []
+
+        for (var i = 0; i < data.results.length; i++) {
+            fetchFilm.push(data.results[i].vote_average)
+            fetchFilmId.push(data.results[i].id)
+        }
+
+        var done = false
+        while(!done) {
+            done = true
+            if(isCroissant == true) {
+                for(var i = 1; i < fetchFilm.length; i++) {
+
+                    if (fetchFilm[i - 1] > fetchFilm[i]) {
+                        done = false
+                        var tmpPopularity = fetchFilm[i - 1]
+                        var tmpid = fetchFilmId[i - 1]
+        
+                        fetchFilm[i - 1] = fetchFilm[i]
+                        fetchFilmId[i - 1] = fetchFilmId[i]
+        
+                        fetchFilm[i] = tmpPopularity
+                        fetchFilmId[i] = tmpid
+                    }
+                }
+            }else {
+                console.log("decroissant")
+                for(var i = 1; i < fetchFilm.length; i++) {
+
+                    if (fetchFilm[i - 1] < fetchFilm[i]) {
+                        done = false
+                        var tmpPopularity = fetchFilm[i - 1]
+                        var tmpid = fetchFilmId[i - 1]
+        
+                        fetchFilm[i - 1] = fetchFilm[i]
+                        fetchFilmId[i - 1] = fetchFilmId[i]
+        
+                        fetchFilm[i] = tmpPopularity
+                        fetchFilmId[i] = tmpid
+                    }
+                }
+            }
+        }
+        // On affiche
+        for (var i = 0; i < fetchFilm.length; i++) {
+            let newUrl = "https://api.themoviedb.org/3/movie/" + fetchFilmId[i] + "?api_key=4d96b3b4809a91b441704c4ff361ba94&language=fr-FR"
+            showAllFilmFilter(newUrl)
+        }
+    })
+}
+
+function getNoteIfGenre() {
+
+    var fetchFilm = []
+    var fetchFilmId = []
+    let limite = 0
+
+    for(var i = 0; i < allFilmId.length; i++) {
+        let film = "https://api.themoviedb.org/3/movie/" + allFilmId[i] + "?api_key=4d96b3b4809a91b441704c4ff361ba94&language=fr-FR"
+        fetch(film)
+            .then((response) => 
+                response.json())
+            .then(function(data) {
+                data.genres.forEach(result => {
+                    // On remplie les tableaux
+                    if(result.name == currentGenre) {
+                        fetchFilm.push(data.vote_average)
+                        fetchFilmId.push(data.id)
+                    }
+                })
+                // Mtn on trie
+                var done = false
+                while(!done) {
+                    done = true
+                    if(isCroissant == true) {
+                        for(var i = 1; i < fetchFilm.length; i++) {
+
+                            if (fetchFilm[i - 1] > fetchFilm[i]) {
+                                done = false
+                                var tmpPopularity = fetchFilm[i - 1]
+                                var tmpid = fetchFilmId[i - 1]
+                
+                                fetchFilm[i - 1] = fetchFilm[i]
+                                fetchFilmId[i - 1] = fetchFilmId[i]
+                
+                                fetchFilm[i] = tmpPopularity
+                                fetchFilmId[i] = tmpid
+                            }
+                        }
+                    }else {
+                        for(var i = 1; i < fetchFilm.length; i++) {
+
+                            if (fetchFilm[i - 1] < fetchFilm[i]) {
+                                done = false
+                                var tmpPopularity = fetchFilm[i - 1]
+                                var tmpid = fetchFilmId[i - 1]
+                
+                                fetchFilm[i - 1] = fetchFilm[i]
+                                fetchFilmId[i - 1] = fetchFilmId[i]
+                
+                                fetchFilm[i] = tmpPopularity
+                                fetchFilmId[i] = tmpid
+                            }
+                        }
+                    }
+                }
+
+                // On affiche
+                limite += 1
+                if(limite == allFilmId.length) {
+                    for (var i = 0; i < fetchFilm.length; i++) {
+                        let newUrl = "https://api.themoviedb.org/3/movie/" + fetchFilmId[i] + "?api_key=4d96b3b4809a91b441704c4ff361ba94&language=fr-FR"
+                        showAllFilmFilter(newUrl)
+                    }
+                }
+        })
+    }
 }
 
 // ------------------------------------- TRI DES FILMS PAR NOM ----------------------------- //
@@ -680,282 +1103,3 @@ function getAvisGenre(url) {
             })
     }
 }
-
-// -------------------------------- TRI PAR NOTE ---------------------- //
-
-function getNote(url) {
-    fetch(url)
-    .then((response) => 
-        response.json())
-
-    .then(function(data) {
-        var fetchFilm = []
-        var fetchFilmId = []
-
-        for (var i = 0; i < data.results.length; i++) {
-            fetchFilm.push(data.results[i].vote_average)
-            fetchFilmId.push(data.results[i].id)
-        }
-
-        var done = false
-        while(!done) {
-            done = true
-            if(isCroissant == true) {
-                for(var i = 1; i < fetchFilm.length; i++) {
-
-                    if (fetchFilm[i - 1] > fetchFilm[i]) {
-                        done = false
-                        var tmpPopularity = fetchFilm[i - 1]
-                        var tmpid = fetchFilmId[i - 1]
-        
-                        fetchFilm[i - 1] = fetchFilm[i]
-                        fetchFilmId[i - 1] = fetchFilmId[i]
-        
-                        fetchFilm[i] = tmpPopularity
-                        fetchFilmId[i] = tmpid
-                    }
-                }
-            }else {
-                console.log("decroissant")
-                for(var i = 1; i < fetchFilm.length; i++) {
-
-                    if (fetchFilm[i - 1] < fetchFilm[i]) {
-                        done = false
-                        var tmpPopularity = fetchFilm[i - 1]
-                        var tmpid = fetchFilmId[i - 1]
-        
-                        fetchFilm[i - 1] = fetchFilm[i]
-                        fetchFilmId[i - 1] = fetchFilmId[i]
-        
-                        fetchFilm[i] = tmpPopularity
-                        fetchFilmId[i] = tmpid
-                    }
-                }
-            }
-        }
-        // On affiche
-        for (var i = 0; i < fetchFilm.length; i++) {
-            let newUrl = "https://api.themoviedb.org/3/movie/" + fetchFilmId[i] + "?api_key=4d96b3b4809a91b441704c4ff361ba94&language=fr-FR"
-            showAllFilmFilter(newUrl)
-        }
-    })
-}
-
-function getNoteIfGenre() {
-
-    var fetchFilm = []
-    var fetchFilmId = []
-    let limite = 0
-
-    for(var i = 0; i < allFilmId.length; i++) {
-        let film = "https://api.themoviedb.org/3/movie/" + allFilmId[i] + "?api_key=4d96b3b4809a91b441704c4ff361ba94&language=fr-FR"
-        fetch(film)
-            .then((response) => 
-                response.json())
-            .then(function(data) {
-                data.genres.forEach(result => {
-                    // On remplie les tableaux
-                    if(result.name == currentGenre) {
-                        fetchFilm.push(data.vote_average)
-                        fetchFilmId.push(data.id)
-                    }
-                })
-                // Mtn on trie
-                var done = false
-                while(!done) {
-                    done = true
-                    if(isCroissant == true) {
-                        for(var i = 1; i < fetchFilm.length; i++) {
-
-                            if (fetchFilm[i - 1] > fetchFilm[i]) {
-                                done = false
-                                var tmpPopularity = fetchFilm[i - 1]
-                                var tmpid = fetchFilmId[i - 1]
-                
-                                fetchFilm[i - 1] = fetchFilm[i]
-                                fetchFilmId[i - 1] = fetchFilmId[i]
-                
-                                fetchFilm[i] = tmpPopularity
-                                fetchFilmId[i] = tmpid
-                            }
-                        }
-                    }else {
-                        for(var i = 1; i < fetchFilm.length; i++) {
-
-                            if (fetchFilm[i - 1] < fetchFilm[i]) {
-                                done = false
-                                var tmpPopularity = fetchFilm[i - 1]
-                                var tmpid = fetchFilmId[i - 1]
-                
-                                fetchFilm[i - 1] = fetchFilm[i]
-                                fetchFilmId[i - 1] = fetchFilmId[i]
-                
-                                fetchFilm[i] = tmpPopularity
-                                fetchFilmId[i] = tmpid
-                            }
-                        }
-                    }
-                }
-
-                // On affiche
-                limite += 1
-                if(limite == allFilmId.length) {
-                    for (var i = 0; i < fetchFilm.length; i++) {
-                        let newUrl = "https://api.themoviedb.org/3/movie/" + fetchFilmId[i] + "?api_key=4d96b3b4809a91b441704c4ff361ba94&language=fr-FR"
-                        showAllFilmFilter(newUrl)
-                    }
-                }
-        })
-    }
-}
-
-// ------------------------------- TRI PAR CLASSIFICATION (pas parfait) ------------------------- //
-
-// function checkClassification(url) {
-
-//     fetch(url)
-//         .then(console.log("hjehjdjf"))
-//         .then((response) => 
-//             response.json())
-//         .then(function(data) {
-//             for(var i = 0; i < 2; i++) {
-//                 console.log('testest')
-//             }
-//             data.results.forEach(region => {
-//                 if(region.iso_3166_1 == "FR") {
-//                     console.log('verif')
-//                     if(currentClassification == '') {
-//                         console.log('verif2')
-//                         if(region.release_dates[0].certification == 'U' || region.release_dates[0].certification == 'G' || region.release_dates[0].certification == '') {
-//                             console.log("test")
-//                             return true
-//                         }
-//                     }else if(currentClassification == '12') {
-//                         if(region.release_dates[0].certification == 'PG-13' || region.release_dates[0].certification == 'G' || region.release_dates[0].certification == '12A' || region.release_dates[0].certification == '12') {
-//                             return true
-//                         }
-//                     }else if(currentClassification == '16') {
-//                         if(region.release_dates[0].certification == 'R' || region.release_dates[0].certification == '15' || region.release_dates[0].certification == 'M15+' || region.release_dates[0].certification == '16') {
-//                             return true
-//                         }
-//                     }else if(currentClassification == '18') {
-//                         if(region.release_dates[0].certification == 'X' || region.release_dates[0].certification == '18' || region.release_dates[0].certification == 'R18+') {
-//                             return true
-//                         }
-//                     }else {
-//                         return false
-//                     }
-
-//                 }
-//             })
-//         })
-// }
-
-// function applCheck() {
-//     new Promise(
-//         checkClassification("https://api.themoviedb.org/3/movie/76600/release_dates?api_key=4d96b3b4809a91b441704c4ff361ba94")
-//     )
-// }
-
-// async function asyncCall() {
-
-//     var result = await applCheck()
-//     console.log('jhahjahe')
-
-// }
-
-// asyncCall()
-
-// console.log(currentClassification)
-// console.log('aaaaaaa' , checkClassification("https://api.themoviedb.org/3/movie/76600/release_dates?api_key=4d96b3b4809a91b441704c4ff361ba94"))
-
-// ------------------------------- Search de film (axios) ------------------------- //
-let searchText = document.getElementById("inputSearch")
-let searchTextValue = ""
-searchText.addEventListener('keydown', function(){
-    if(searchText.value != searchTextValue) {
-        searchTextValue = searchText.value
-    }
-})
-
-let buttonSearch = document.querySelector('.buttonWriteSearch')
-buttonSearch.addEventListener('click', function() {
-    searchForFilm()
-})
-
-function searchForFilm() {
-    var query = "https://api.themoviedb.org/3/search/movie?api_key=4d96b3b4809a91b441704c4ff361ba94&language=fr-FR&query=" + searchText.value
-    axios.get(query).then(function(response) {
-        resetInnerHTML(trending)
-        response.data.results.forEach(film => {
-            if(film.backdrop_path != null) {
-                let newUrl = "https://api.themoviedb.org/3/movie/" + film.id + "?api_key=4d96b3b4809a91b441704c4ff361ba94&language=fr-FR"
-                showAllFilmSearch(newUrl)
-            }
-        })
-    }).catch(function(error) {
-        console.log(error)
-    })
-}
-
-// -------------------------------------- AUTRES ------------------------------------ //
-
-function writeTitle(filmName) {
-    let newTitle = ""
-    for (var i = 0; i < filmName.length; i++) {
-        if(filmName.charAt(i) == " "){
-            newTitle += "+"
-        }else{
-            newTitle += filmName.charAt(i)
-        }
-    }
-    // (newTitle)
-
-    // console.log("https://api.themoviedb.org/3/search/movie?api_key=4d96b3b4809a91b441704c4ff361ba94&language=fr-FR&query=" + newTitle)
-    return("https://api.themoviedb.org/3/search/movie?api_key=4d96b3b4809a91b441704c4ff361ba94&language=fr-FR&query=" + newTitle)
-}
-
-function getFilmDetailUrl(url) {
-    let newUrl = []
-    fetch(url)
-        .then((response) => 
-            response.json())
-
-        .then(function(data) {
-            var fetchFilm = []
-            // console.log("pas de genre")
-            for (var i = 0; i < data.results.length; i++) {
-                fetchFilm.push(data.results[i].title)
-            }
-            fetchFilm.sort()
-            // On affiche
-            for (var i = 0; i < fetchFilm.length; i++) {
-                newUrl.push(writeTitle(fetchFilm[i]))
-            }
-            return(newUrl)
-        })
-
-}
-
-
-
-function bubbleSort(array) {
-    var done = false;
-    while (!done) {
-      done = true;
-      for (var i = 1; i < array.length; i += 1) {
-        if (array[i - 1] < array[i]) {
-          done = false;
-          var tmp = array[i - 1];
-          array[i - 1] = array[i];
-          array[i] = tmp;
-        }
-      }
-    }
-  
-    return array;
-  }
-  
-var numbers = [12, 10, 15, 11, 14, 13, 16];
-bubbleSort(numbers);
-// console.log("le sort mano :" , numbers);

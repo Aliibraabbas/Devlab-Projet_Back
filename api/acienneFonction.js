@@ -182,3 +182,19 @@ function getAvis(url) {
         })
 
 }
+
+// -------------------------------------------- test async ------------------------------------ //
+// function applCheck() {
+//     new Promise(
+//         checkClassification("https://api.themoviedb.org/3/movie/76600/release_dates?api_key=4d96b3b4809a91b441704c4ff361ba94")
+//     )
+// }
+
+// async function asyncCall() {
+
+//     var result = await applCheck()
+//     console.log('jhahjahe')
+
+// }
+
+// asyncCall()

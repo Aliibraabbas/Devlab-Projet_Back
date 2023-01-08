@@ -24,6 +24,8 @@
   },
   "homepage": "https://github.com/Aliibraabbas/Devlab-Projet_Back#readme",
   "dependencies": {
-    "axios": "^0.21.1"
+    "axios": "^0.21.1",
+    "dotenv": "^16.0.3",
+    "uniq": "^1.0.1"
   }
 }

@@ -1,3 +1,5 @@
+// require('dotenv').config();
+// api_key = process.env.api_key
 let moovie = document.querySelector(".accueil")
 let trending = "https://api.themoviedb.org/3/movie/popular?api_key=4d96b3b4809a91b441704c4ff361ba94&language=fr-FR"
 
@@ -454,7 +456,6 @@ function checkClassification(url) {
                     }else {
                         return false
                     }
-
                 }
             })
         })

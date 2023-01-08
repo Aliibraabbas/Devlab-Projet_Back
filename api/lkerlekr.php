@@ -8,5 +8,6 @@
 </head>
 <body>
     <a href="../onepage.php"></a>
+    <script type="module" src="test.js"></script>
 </body>
 </html>

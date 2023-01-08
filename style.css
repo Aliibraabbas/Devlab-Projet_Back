@@ -7,6 +7,10 @@
     color: inherit;
   }
   
+body {
+  background-color: #0f3b69;
+}
+
   nav ul {
     list-style: none;
     overflow: hidden;
@@ -129,88 +133,10 @@
     font-weight: bold;
   }
  
-/* ----------------------- ONE PAGE -------------------------- */
+/* ----------------------- ONE PAGE --------------------- */
 
-.container {
-  display: flex;
-  align-items: center;
-  gap: 10em;
-  margin-top: 5em;
-  margin-inline: 1em;
-}
-
-.poster {
-  width: 30%;
-  margin-right: 20px;
-}
-
-.info {
-  width: 60%;
-}
-
-.title {
-  font-size: 32px;
-  font-weight: bold;
-  margin-bottom: 10px;
-}
-
-.description {
-  font-size: 16px;
-  margin-bottom: 20px;
-}
-
-.actors {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1em;
-}
-
-.actor {
-  width: 25%;
-  text-align: center;
-  margin-bottom: 10px;
-  border-radius: 10px;
-  background-color: #eee;
-  padding: 10px;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-.actor img {
-  width: 70%;
-  border-radius: 25%;
-  margin-bottom: 10px;
-}
-
-.actor .name {
-  font-size: 14px;
-  font-weight: bold;
-}
-
-.buttons {
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  margin-top: 2em;
-}
 
 .visionne,
 .like {
-  border: none;
-  text-align: center;
-  font-size: 16px;
-  border-radius: 25px;
-  width: 25%;
-  height: 3em;
   box-shadow: 0px 15px 20px rgba(46, 229, 157, 0.4);
-}
-
-.like {
-  background-color: red;
-}
-.visionne {
-  background-color: yellow;
 }

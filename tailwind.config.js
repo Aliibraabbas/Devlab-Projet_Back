@@ -4,7 +4,11 @@ module.exports = {
     "./*.{php,js}"
   ],
   theme: {
-    extend: {},
+    extend:{
+      width: {
+        '20%': '20%',
+      }
+    },
   },
   plugins: [],
 }

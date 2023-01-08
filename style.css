@@ -7,6 +7,10 @@
     color: inherit;
   }
   
+body {
+  background-color: #0f3b69;
+}
+
   nav ul {
     list-style: none;
     overflow: hidden;
@@ -129,3 +133,10 @@
     font-weight: bold;
   }
  
+/* ----------------------- ONE PAGE --------------------- */
+
+
+.visionne,
+.like {
+  box-shadow: 0px 15px 20px rgba(46, 229, 157, 0.4);
+}

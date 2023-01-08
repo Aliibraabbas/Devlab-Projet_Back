@@ -24,7 +24,7 @@
 <br><br><br>
 
     <label for="">Choisir une categorie</label>
-    <select id="catego" class="genre">
+    <select id="catego" class="filter">
         <option value="">Aucun</option>
         <option value="Action">Action</option>
         <option value="Adventure">Adventure</option>
@@ -44,9 +44,10 @@
 
     <button class="searchButton">Chercher</button>
 
+
     <div class="grid grid-cols-3 p-40 grid-flow-row gap-4 accueil"></div>
 
-
+    
     <script src="api/accueil.js"></script>
 
     <?php 

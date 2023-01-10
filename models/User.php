@@ -10,7 +10,7 @@ class User {
     }
 
     public function findUserByEmailOrUsername($email, $username){
-        $this->db->query('SELECT * FROM users WHERE usersUid = :username OR usersEmail = :email');
+        $this->db->query('SELECT * FROM user WHERE usersUid = :username OR usersEmail = :email');
         $this->db->bind(':username', $username);
         $this->db->bind(':email', $email);
 
@@ -25,7 +25,7 @@ class User {
 
     //Register User
     public function register($data){
-        $this->db->query('INSERT INTO users (usersName, usersEmail, usersUid, usersPwd) 
+        $this->db->query('INSERT INTO user (usersName, usersEmail, usersUid, usersPwd) 
         VALUES (:name, :email, :Uid, :password)');
         
         $this->db->bind(':name', $data['usersName']);

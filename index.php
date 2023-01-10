@@ -19,10 +19,10 @@
 <body class="bg-slate-800 font-mont">
     <input type="hidden" value="trending" class="whichPage">
 
-<h1 class="text-center font-bold mt-14 text-4xl text-white font-mont">Welcome, <?php if(isset($_SESSION['usersId'])){
+<h1 class="text-center font-bold mt-14 text-4xl text-white font-mont">Welcome, <?php if(isset($_SESSION['id'])){
         echo explode(" ", $_SESSION['usersName'])[0];
     }else{
-        echo 'Guest';
+        echo 'User';
     } 
     ?> </h1>
 <br><br><br>

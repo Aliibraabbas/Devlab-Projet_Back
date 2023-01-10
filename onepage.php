@@ -53,8 +53,9 @@
             </div>
 
             <div class="buttons flex items-center justify-around mt-8">
-                <button class="visionne border-none text-center text-base rounded-full w-1/4 h-12 bg-yellow-400">Visioner</button>
-                <button class="like border-none text-center text-base rounded-full w-1/4 h-12 bg-red-600">Like</button>
+            <button class="visionne border-none text-center text-base rounded-full w-1/4 h-12 bg-yellow-400" >Visioné</button>
+            <button class="visionne border-none text-center text-base rounded-full w-1/4 h-12 bg-yellow-400" >liste d’envies </button>
+            <button class="like border-none text-center text-base rounded-full w-1/4 h-12 bg-red-600" >Like</button>
             </div>
         </div>
     </div>

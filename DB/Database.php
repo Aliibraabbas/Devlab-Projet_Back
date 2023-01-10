@@ -3,8 +3,8 @@
 class Database {
     private $host = 'localhost';
     private $user = 'root';
-    private $pass = 'root';
-    private $dbname = 'login-system';
+    private $pass = '';
+    private $dbname = 'devlab_backend';
 
     private $dbh;
     private $stmt;

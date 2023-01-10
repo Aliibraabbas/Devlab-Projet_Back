@@ -11,11 +11,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
-    <title>Document</title>
-</head>
-<body>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
 
-<h1 class="text-center font-bold mt-14 text-4xl">Welcome, <?php if(isset($_SESSION['usersId'])){
+</head>
+<body class="bg-slate-800 font-mont">
+    <input type="hidden" value="trending" class="whichPage">
+
+<h1 class="text-center font-bold mt-14 text-4xl text-white font-mont">Welcome, <?php if(isset($_SESSION['usersId'])){
         echo explode(" ", $_SESSION['usersName'])[0];
     }else{
         echo 'Guest';
@@ -25,14 +29,14 @@
 
     <div class="searchBar flex flex-row align-middle justify-center gap-10">
         <input type="text" class="inputSearch border-solid border-4 w-2/5" id="inputSearch">
-        <button class="buttonWriteSearch">search</button>
+        <button class="buttonWriteSearch font-mont text-white cursor-pointer">search</button>
     </div>
 
     <br>
-    <div class="filter-container flex justify-around text-lg mt-2">
-        <div class="catagorie">
+    <div class="filter-container flex justify-around text-lg mt-2 items-baseline">
+        <div class="catagorie bg-slate-500 rounded-sm w-1/5 flex gap-2 items-center justify-center">
             <label for="" class="text-white">Choisir une categorie</label>
-            <select id="catego" class="genre">
+            <select id="catego" class="genre outline-none border-none cursor-pointer">
                 <option value="">Aucun</option>
                 <option value="Action">Action</option>
                 <option value="Aventure">Aventure</option>
@@ -42,21 +46,23 @@
             </select>
         </div>
 
-        <div class="tri">
+        <div class="tri bg-slate-500 rounded-sm w-1/5 flex gap-2 items-center justify-around">
             <label for="" class="text-white">Trier par : </label>
-            <select id="tri" class="tri_filter">
+            <select id="tri" class="tri_filter cursor-pointer">
                 <option value="">Aucun</option>
                 <option value="nom">Nom</option>
                 <option value="avis">Avis</option>
                 <option value="popularite">Popularité</option>
                 <option value="note">Note</option>
             </select>
-            <button id="croissantBtn" class="croissant border-solid border-blue-200 border-4">Croissant</button>
+            <button id="croissantBtn" class="croissant">
+                <img src="img/croissant.png" alt="" class="h-8 img-croiss">
+            </button>
         </div>
 
-        <div class="classifiction">
+        <div class="classifiction bg-slate-500 rounded-sm w-1/5 flex gap-2 items-center justify-around">
             <label for="" class="text-white">Limite d'age</label>
-            <select id="" class="limiteAge">
+            <select id="" class="limiteAge cursor-pointer">
                 <option value="">Aucun</option>
                 <option value="all">Tout public</option>
                 <option value="12">12+</option>
@@ -65,11 +71,12 @@
             </select>
         </div>
 
-        <button class="searchButton text-white">Chercher</button>
+        <button class="resetButton text-white bg-slate-500 rounded-full w-24">reset</button>
+        <button class="searchButton text-white bg-slate-500 rounded-full w-24">Chercher</button>
 
     </div>
 
-    <div class="grid grid-cols-3 px-40 py-32 grid-flow-row gap-4 accueil"></div>
+    <div class="grid grid-cols-4 px-40 py-32 grid-flow-row gap-4 accueil"></div>
 
 
     <script src="api/accueil.js"></script>

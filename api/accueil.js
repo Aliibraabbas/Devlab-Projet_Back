@@ -1,6 +1,8 @@
 // require('dotenv').config();
 // api_key = process.env.api_key
 let moovie = document.querySelector(".accueil")
+let currentPage = document.querySelector(".whichPage")
+
 let trending = "https://api.themoviedb.org/3/movie/popular?api_key=4d96b3b4809a91b441704c4ff361ba94&language=fr-FR"
 
 // Ajoute tout les id des films dans un tableau
@@ -42,13 +44,14 @@ let currentClassification = classification.value
 let croissant = document.querySelector(".croissant")
 
 // Met a jour croissant/decroissant
+let img_croiss = document.querySelector(".img-croiss")
 croissant.addEventListener("click", function(){
     if(isCroissant == true) {
         isCroissant = false
-        croissant.textContent = 'Decroissant'
+        img_croiss.src = "img/decroissant.png"
     }else {
         isCroissant = true
-        croissant.textContent = 'Croissant'
+        img_croiss.src = "img/croissant.png"
     }
     console.log(isCroissant)
 })
@@ -84,24 +87,37 @@ classification.addEventListener("click", function() {
     }
 })
 
+let resetButton = document.querySelector('.resetButton')
+resetButton.addEventListener("click", function() {
+    classification.value = ""
+    tri.value = ""
+    category.value = ""
+    console.log("reset")
+    console.log('class value' , classification.value)
+    resetInnerHTML(trending)
+    showAllFilm(trending)
+})
+
 // ------------------- Boutton qui lance l'affichafe des films ----------------------------------- //
 let searchButton = document.querySelector(".searchButton")
 searchButton.addEventListener("click", function() {
-    if(currentClassification != "" && currentGenre == "" && currentTri == "") {
+    if(currentClassification != "") {
+        console.log(classification.value)
         resetInnerHTML(trending)
         for(var i = 0; i < allFilmId.length; i++) {
             checkClassification("https://api.themoviedb.org/3/movie/"+ allFilmId[i] +"/release_dates?api_key=4d96b3b4809a91b441704c4ff361ba94")
         }
     }else{
-        classification.value = ""
         // Affiche tout les films si il n'y a pas de genre choisit
         if(currentGenre == ""){
             // Si il n'y a pas de tri choisit
             if(currentTri == "") {
+                console.log("la")
                 resetInnerHTML(trending)
                 showAllFilm(trending)
             }else {
                 if(currentTri == "nom") {
+                    console.log("ici")
                     resetInnerHTML(trending)
                     triFilm(trending, "nom")
                 }else if(currentTri == "popularite") {
@@ -184,9 +200,9 @@ function showFilmByGenre(url) {
                             if(result.name == currentGenre) {
                                 moovie.innerHTML += `
                                     <a href="onepage.php?id=${data.id}">
-                                        <div class="rounded-3xl relative">
-                                            <img src="${"https://image.tmdb.org/t/p/original" + data.backdrop_path}" alt="" class="rounded-3xl w-full">
-                                            <h2 class="p-2 text-xl absolute left-0 bottom-0 bg-orange-500 w-full rounded-b-3xl">${data.title}</h2>
+                                        <div class="rounded-md relative shadow-lg shadow-white shadow-md">
+                                            <img src="${"https://image.tmdb.org/t/p/original" + data.backdrop_path}" alt="" class="rounded-md w-full">
+                                            <h2 class="p-2 text-xl absolute left-0 bottom-0 bg-slate-500 w-full rounded-b-md">${data.title}</h2>
                                         </div>
                                     </a>
                                     `
@@ -212,9 +228,9 @@ function showAllFilm(url) {
     
             moovie.innerHTML += `
                 <a href="onepage.php?id=${film.id}">
-                    <div class="rounded-3xl relative">
-                        <img src="${"https://image.tmdb.org/t/p/original" + film.backdrop_path}" alt="" class="rounded-3xl w-full">
-                        <h2 class="p-2 text-xl absolute left-0 bottom-0 bg-orange-500 w-full rounded-b-3xl">${film.title}</h2>
+                    <div class="rounded-md relative shadow-lg shadow-white shadow-md">
+                        <img src="${"https://image.tmdb.org/t/p/original" + film.backdrop_path}" alt="" class="rounded-md w-full">
+                        <h2 class="p-2 text-xl absolute left-0 bottom-0 bg-slate-500 w-full rounded-b-md">${film.title}</h2>
                     </div>
                 </a>
                 `
@@ -234,9 +250,9 @@ function showAllFilmSearch(url) {
     .then(function(data) {
         moovie.innerHTML += `
             <a href="onepage.php?id=${data.id}">
-                <div class="rounded-3xl relative">
-                    <img src="${"https://image.tmdb.org/t/p/original" + data.backdrop_path}" alt="" class="rounded-3xl w-full">
-                    <h2 class="p-2 text-xl absolute left-0 bottom-0 bg-orange-500 w-full rounded-b-3xl">${data.title}</h2>
+                <div class="rounded-md relative shadow-lg shadow-white shadow-md">
+                    <img src="${"https://image.tmdb.org/t/p/original" + data.backdrop_path}" alt="" class="rounded-md w-full">
+                    <h2 class="p-2 text-xl absolute left-0 bottom-0 bg-slate-500 w-full rounded-b-md">${data.title}</h2>
                 </div>
             </a>
             `
@@ -255,12 +271,11 @@ function showAllFilmFilter(url) {
 
     .then(function(data) {
 
-        console.log(data.id, data.title)
         moovie.innerHTML += `
             <a href="onepage.php?id=${data.id}">
-                <div class="rounded-3xl relative">
-                    <img src="${"https://image.tmdb.org/t/p/original" + data.backdrop_path}" alt="" class="rounded-3xl w-full">
-                    <h2 class="p-2 text-xl absolute left-0 bottom-0 bg-orange-500 w-full rounded-b-3xl">${data.title}</h2>
+                <div class="rounded-md relative shadow-lg shadow-white shadow-md">
+                    <img src="${"https://image.tmdb.org/t/p/original" + data.backdrop_path}" alt="" class="rounded-md w-full">
+                    <h2 class="p-2 text-xl absolute left-0 bottom-0 bg-slate-500 w-full rounded-b-md">${data.title}</h2>
                 </div>
             </a>
             `
@@ -332,7 +347,7 @@ function triFilm(url, whichTri) {
                     }
                 }
 
-                // console.log(fetchFilm)
+                console.log(fetchFilm)
                 // console.log(fetchFilmId)
                 
             }

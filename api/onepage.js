@@ -30,7 +30,7 @@ window.onload = function() {
 
     .then(function(data) {
 
-        console.log(data)
+        console.log(data.id)
         img.src = ` ${"https://image.tmdb.org/t/p/original" + data.poster_path} `
         title.innerHTML += `${data.title}`
         description.innerHTML += `${data.overview}`

@@ -5,23 +5,6 @@ require_once '../header.php';
 require_once '../controllers/album.php';
 
 
-if (isset($_POST["addAlbum"])) {
-  $album = new Album(
-      $_POST['name'],
-      $_POST['privacy'], 
-      $_SESSION['id'],
-  );
-  // $result = new result();
-  // $creat = $result->insertAlbum($album);
-  // if ($creat) {
-  //     echo 'Album Crée';
-  // } else {
-      echo 'Album Crée';
-  // }
-}
-
-
-
 
 //   $connection = new Connection();
 $album = new Album();
